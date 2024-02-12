@@ -25,11 +25,16 @@ public class Endpoints{
     @Path("/reverse")
     public Response reverse(ReverseRequest response)
     {
-        if (response == null)
+        if (response == null || response.content.isEmpty() || response.content.compareTo("") == 0)
         {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         ReverseResponse rep = new ReverseResponse(response);
+        if (rep == null || rep.original == null || rep.original.isEmpty())
+        {
+            System.out.println("Bad");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
         return Response.ok(rep, MediaType.APPLICATION_JSON_TYPE).build();
     }
 }
