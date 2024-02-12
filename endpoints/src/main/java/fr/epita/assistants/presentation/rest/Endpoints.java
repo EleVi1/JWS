@@ -3,10 +3,10 @@ package fr.epita.assistants.presentation.rest;
 import fr.epita.assistants.presentation.rest.request.ReverseRequest;
 import fr.epita.assistants.presentation.rest.response.HelloResponse;
 import fr.epita.assistants.presentation.rest.response.ReverseResponse;
-import io.vertx.core.json.Json;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Produces(MediaType.APPLICATION_JSON) // return json
 @Consumes(MediaType.APPLICATION_JSON) // get json
@@ -23,9 +23,13 @@ public class Endpoints{
 
     @POST
     @Path("/reverse")
-    public ReverseResponse reverse(ReverseRequest response)
+    public Response reverse(ReverseRequest response)
     {
+        if (response == null)
+        {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
         ReverseResponse rep = new ReverseResponse(response);
-        return rep;
+        return Response.ok(rep, MediaType.APPLICATION_JSON_TYPE).build();
     }
 }
