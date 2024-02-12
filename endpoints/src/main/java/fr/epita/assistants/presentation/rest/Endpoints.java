@@ -17,15 +17,15 @@ public class Endpoints{
     @Path("/hello/{name}")
     public HelloResponse hello(@PathParam("name") String name)
     {
-        HelloResponse rep = new HelloResponse(name);
-        return rep;
+        HelloResponse response = new HelloResponse(name);
+        return response;
     }
 
     @POST
     @Path("/reverse")
     public Response reverse(ReverseRequest response)
     {
-        if (response == null || response.content.isEmpty() || response.content.compareTo("") == 0)
+        if (response == null || response.content == null ||response.content.isEmpty() || response.content.compareTo("") == 0)
         {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
