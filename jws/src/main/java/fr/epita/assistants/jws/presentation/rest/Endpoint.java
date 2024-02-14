@@ -58,12 +58,12 @@ public class Endpoint {
     {
         if (gameId < 0)
         {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
         GameInfoResponse infos = gameInfo.getInfo(gameId);
         if (infos == null)
         {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(infos).build();
     }
