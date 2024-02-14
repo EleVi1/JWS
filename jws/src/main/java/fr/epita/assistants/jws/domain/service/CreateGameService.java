@@ -19,7 +19,6 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @ApplicationScoped
 public class CreateGameService {
@@ -64,13 +63,13 @@ public class CreateGameService {
         game.map = content;
         game.players_id.add(player);
 
+        gameRepository.persist(game);
+        playerRepository.persist(player);
+
         List<CreatePlayerResponse> players = new ArrayList<>();
         players.add(new CreatePlayerResponse(player.id, player.name, player.lives, player.posx, player.posy));
         CreateGameResponse response = new CreateGameResponse(game.id, game.starttime, game.state, players, content);
 
-
-        gameRepository.persist(game);
-        playerRepository.persist(player);
         return response;
     }
 }

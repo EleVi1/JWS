@@ -3,9 +3,11 @@ package fr.epita.assistants.jws.presentation.rest;
 import fr.epita.assistants.jws.data.model.GameModel;
 import fr.epita.assistants.jws.domain.entity.GameEntity;
 import fr.epita.assistants.jws.domain.service.CreateGameService;
+import fr.epita.assistants.jws.domain.service.GameInfoService;
 import fr.epita.assistants.jws.domain.service.GameListService;
 import fr.epita.assistants.jws.presentation.rest.request.CreateGameRequest;
 import fr.epita.assistants.jws.presentation.rest.response.CreateGameResponse;
+import fr.epita.assistants.jws.presentation.rest.response.GameInfoResponse;
 import fr.epita.assistants.jws.presentation.rest.response.GameListResponse;
 
 import javax.inject.Inject;
@@ -25,6 +27,9 @@ public class Endpoint {
 
     @Inject
     GameListService ListService;
+
+    @Inject
+    GameInfoService gameInfo;
     @GET
     @Path("/games")
     public Response getAllGames()
@@ -47,12 +52,21 @@ public class Endpoint {
         return Response.ok(response).build();
     }
 
-    //    @GET
-//    @Path("/games/{gameId}")
-//    public Response getGameInfo(@PathParam("gameId") long gameId)
-//    {
-//        //TODO
-//    }
+    @GET
+    @Path("/games/{gameId}")
+    public Response getGameInfo(@PathParam("gameId") long gameId)
+    {
+        if (gameId < 0)
+        {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        GameInfoResponse infos = gameInfo.getInfo(gameId);
+        if (infos == null)
+        {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        return Response.ok(infos).build();
+    }
 
 //    @POST
 //    @Path("/games/{gameId}")
