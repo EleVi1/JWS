@@ -4,22 +4,30 @@ import fr.epita.assistants.jws.converter.GameConverter;
 import fr.epita.assistants.jws.data.repository.GameRepository;
 import fr.epita.assistants.jws.data.model.GameModel;
 import fr.epita.assistants.jws.domain.entity.GameEntity;
+import fr.epita.assistants.jws.presentation.rest.response.GameListResponse;
 // keep Entity Game
 
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
 public class GameListService {
 
-    private GameRepository gameListRepository = new GameRepository();
+    GameRepository gameListRepository = new GameRepository();
 
-    public List<GameEntity> getAll()
+    public List<GameListResponse> getAll()
     {
-        List<GameModel> res = gameListRepository.listAll();
-        GameConverter conv = new GameConverter();
-        return conv.convertToEntityList(res);
+        List<GameListResponse> response = new ArrayList<>();
+        List<GameModel> games = gameListRepository.listAll();
+        for (GameModel game: games)
+        {
+            response.add(new GameListResponse(game.id, game.players_id.size(), game.state));
+        }
+        return response;
     }
 
 }

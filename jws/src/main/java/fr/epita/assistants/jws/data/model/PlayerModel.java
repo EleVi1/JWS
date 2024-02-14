@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class PlayerModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) public long id;
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "suite") public long id;
 
     public Timestamp lastbomb;
     public Timestamp lastmovement;
@@ -29,10 +29,6 @@ public class PlayerModel {
     public int position;
 
     @ManyToOne
-    @JoinColumn(name = "game_id")//, referencedColumnName = "id")
+    @JoinColumn(name = "game_id")
     public GameModel game_id;
-
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "game_player", joinColumns = @JoinColumn(name = "id"))
-    public Set<Game_Player> game_players = new HashSet<>();
 }
