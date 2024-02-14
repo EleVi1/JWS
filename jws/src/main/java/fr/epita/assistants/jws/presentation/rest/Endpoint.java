@@ -1,24 +1,26 @@
 package fr.epita.assistants.jws.presentation.rest;
 
-import fr.epita.assistants.jws.domain.entity.Game;
+import fr.epita.assistants.jws.data.model.GameModel;
 import fr.epita.assistants.jws.domain.service.GameListService;
+import fr.epita.assistants.jws.presentation.rest.response.GameListResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/")
-public class Endpoints{
+public class Endpoint {
 
     private GameListService gameListService = new GameListService();
     @GET
     @Path("/games")
-    public List<Game> getAllGames()
+    public Response getAllGames()
     {
-        List<Game> res =  gameListService.getAll();
-        return res;
+        GameListResponse res =  new GameListResponse();
+        return Response.ok(res.games).build();
     }
 
 //    @GET
