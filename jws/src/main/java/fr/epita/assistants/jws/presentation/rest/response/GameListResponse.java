@@ -3,6 +3,7 @@ package fr.epita.assistants.jws.presentation.rest.response;
 import fr.epita.assistants.jws.domain.entity.GameEntity;
 import fr.epita.assistants.jws.domain.service.GameListService;
 
+
 import java.util.ArrayList;
 import java.util.List;
 

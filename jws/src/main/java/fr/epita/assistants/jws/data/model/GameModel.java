@@ -24,3 +24,4 @@ public class GameModel {
     @CollectionTable(name = "game_map", joinColumns = @JoinColumn(name = "id"))
     public Set<Game_Map> game_map = new HashSet<>();
 }
+

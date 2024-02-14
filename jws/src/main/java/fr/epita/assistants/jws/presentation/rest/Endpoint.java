@@ -1,13 +1,12 @@
 package fr.epita.assistants.jws.presentation.rest;
 
-import fr.epita.assistants.jws.data.model.GameModel;
 import fr.epita.assistants.jws.domain.service.GameListService;
+import fr.epita.assistants.jws.presentation.rest.request.CreateGameRequest;
 import fr.epita.assistants.jws.presentation.rest.response.GameListResponse;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
+
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -31,12 +30,14 @@ public class Endpoint {
 //    }
 
 
-//    @POST
-//    @Path("/games/")
-//    public Game createGame()
-//    {
-//        //TODO
-//    }
+    @POST
+    @Path("/games/")
+    public Response createGame(CreateGameRequest request)
+    {
+//        CreateGameResponse rep =
+//        return Response.ok(rep, MediaType.APPLICATION_JSON_TYPE).build();
+        return null;
+    }
 
 //    @POST
 //    @Path("/games/{gameId}")

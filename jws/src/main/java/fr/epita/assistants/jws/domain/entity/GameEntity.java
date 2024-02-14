@@ -6,5 +6,5 @@ public class GameEntity {
     public long id;
     public Timestamp starttime;
     public String state;
-
 }
+
