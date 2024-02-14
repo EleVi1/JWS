@@ -1,20 +1,11 @@
 package fr.epita.assistants.jws.data.model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.sql.Timestamp;
-
 //@Entity
 //@Table (name = "player")
 //@Getter
 //@Setter
 //@NoArgsConstructor
-public class Player extends PanacheEntity {
+public class PlayerModel {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO) public long id;
 //
