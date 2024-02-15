@@ -61,9 +61,7 @@ public class MovePlayerService {
 
         GameConverter conv = new GameConverter();
         List<String> decodedMap = conv.decodeMap(game.map);
-        if (decodedMap.get(posY).charAt(posX) == 'M' ||
-                decodedMap.get(posY).charAt(posX) == 'B' ||
-                decodedMap.get(posY).charAt(posX) == 'W')
+        if (decodedMap.get(posY).charAt(posX) != 'G')
         {
             return Errors.sendBadRequest();
         }
