@@ -49,6 +49,17 @@ public class MovePlayerService {
         {
             return Errors.sendBadRequest(); // Bad Request 400
         }
+        if (player.lastmovement != null)
+        {
+            Timestamp time = player.lastmovement;
+            long offset = (Long.parseLong(tick_duration) * Long.parseLong(delay_moment));
+            time.setTime(time.getTime() + offset);
+            if (Timestamp.from(Instant.now()).before(time))
+            {
+                return Errors.sendTooManyRequest();
+            }
+        }
+
         GameConverter conv = new GameConverter();
         List<String> decodedMap = conv.decodeMap(game.map);
         if (decodedMap.get(posY).charAt(posX) == 'M' ||

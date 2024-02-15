@@ -13,4 +13,9 @@ public class Errors {
     {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
+    public static Response sendTooManyRequest()
+    {
+
+        return Response.status(Response.Status.TOO_MANY_REQUESTS).build();
+    }
 }

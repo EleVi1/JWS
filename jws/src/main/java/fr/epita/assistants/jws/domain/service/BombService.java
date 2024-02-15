@@ -5,6 +5,7 @@ import fr.epita.assistants.jws.data.model.GameModel;
 import fr.epita.assistants.jws.data.model.PlayerModel;
 import fr.epita.assistants.jws.data.repository.GameRepository;
 import fr.epita.assistants.jws.data.repository.PlayerRepository;
+import fr.epita.assistants.jws.errors.Errors;
 import fr.epita.assistants.jws.presentation.rest.response.CreatePlayerResponse;
 import fr.epita.assistants.jws.presentation.rest.response.GameDetailResponse;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -23,7 +24,7 @@ public class BombService {
     @ConfigProperty(name = "JWS_TICK_DURATION", defaultValue = "1")
     String tick_duration;
     @ConfigProperty(name = "JWS_DELAY_BOMB", defaultValue = "1")
-    String delay_moment;
+    String delay_bomb;
     @Inject
     GameRepository gameRepository;
 
@@ -42,6 +43,17 @@ public class BombService {
                 (posY != player.posy || posX != player.posx))
         {
             return Response.status(Response.Status.BAD_REQUEST).build(); // Bad Request 400
+        }
+
+        if (player.lastbomb != null)
+        {
+            Timestamp time = player.lastbomb;
+            long offset = (Long.parseLong(tick_duration) * Long.parseLong(delay_bomb));
+            time.setTime(time.getTime() + offset);
+            if (Timestamp.from(Instant.now()).before(time))
+            {
+                return Errors.sendTooManyRequest();
+            }
         }
         GameConverter conv = new GameConverter();
         List<String> decodedMap = conv.decodeMap(game.map);
