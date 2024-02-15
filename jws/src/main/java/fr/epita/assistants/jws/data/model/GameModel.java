@@ -26,10 +26,11 @@ public class GameModel {
             joinColumns = { @JoinColumn(name = "gamemodel_id", referencedColumnName = "id")},
             inverseJoinColumns = { @JoinColumn(name = "players_id", referencedColumnName = "id")}
     )
-    public Set<PlayerModel> players_id = new HashSet<>();
+    public List<PlayerModel> players_id = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "game_map", joinColumns = @JoinColumn(name = "gamemodel_id"))
     public List<String> map = new ArrayList<>();
+
 }
 

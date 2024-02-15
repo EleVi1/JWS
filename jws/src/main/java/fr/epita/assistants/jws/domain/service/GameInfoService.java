@@ -12,7 +12,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ApplicationScoped
 public class GameInfoService {
@@ -31,8 +33,7 @@ public class GameInfoService {
             return null;
         }
 
-        List<PlayerModel> players = new ArrayList<>();
-        players = playerRepository.list("game_id", game);
+        List<PlayerModel> players = game.players_id;
         List<CreatePlayerResponse> players_list = new ArrayList<>();
         for (PlayerModel player:players)
         {
