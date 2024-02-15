@@ -2,6 +2,7 @@ package fr.epita.assistants.jws.presentation.rest;
 
 import fr.epita.assistants.jws.domain.service.*;
 import fr.epita.assistants.jws.presentation.rest.request.CreateGameRequest;
+import fr.epita.assistants.jws.presentation.rest.request.MovePlayerRequest;
 import fr.epita.assistants.jws.presentation.rest.response.GameDetailResponse;
 import fr.epita.assistants.jws.presentation.rest.response.GameListResponse;
 
@@ -29,6 +30,8 @@ public class Endpoint {
     @Inject
     StartGameService startGameService;
 
+    @Inject
+    MovePlayerService moveService;
     @GET
     @Path("/games")
     public Response getAllGames()
@@ -92,5 +95,18 @@ public class Endpoint {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(resp).build();
+    }
+
+    @POST
+    @Path("/games/{gameId}/players/{playerId}/move")
+    public Response move(@PathParam("gameId") long gameId, @PathParam("playerId") long playerId,
+                             MovePlayerRequest request)
+    {
+        if (request == null || request.posX < 0 || request.posX >= 17
+                || request.posY < 0 ||  request.posY >= 15 || gameId <= 0)
+        {
+            return Response.status(Response.Status.BAD_REQUEST).build(); // 400
+        }
+        return moveService.move(gameId, playerId, request.posX, request.posY);
     }
 }

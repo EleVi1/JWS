@@ -3,7 +3,6 @@ package fr.epita.assistants.jws.domain.service;
 import fr.epita.assistants.jws.data.model.GameModel;
 import fr.epita.assistants.jws.data.model.PlayerModel;
 import fr.epita.assistants.jws.data.repository.GameRepository;
-import fr.epita.assistants.jws.data.repository.PlayerRepository;
 import fr.epita.assistants.jws.presentation.rest.response.CreatePlayerResponse;
 import fr.epita.assistants.jws.presentation.rest.response.GameDetailResponse;
 
@@ -23,7 +22,7 @@ public class StartGameService {
     public GameDetailResponse startGame(long game_id)
     {
         GameModel game = gameRepository.findById(game_id);
-        if (game == null)
+        if (game == null || game.state.compareTo("FINISHED") == 0)
         {
             return null;
         }

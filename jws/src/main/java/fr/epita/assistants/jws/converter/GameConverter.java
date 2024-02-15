@@ -28,27 +28,46 @@ public class GameConverter {
         return entity;
     }
 
-    public GameModel convertToModel(GameEntity entity)
+    public List<String> decodeMap(List<String> map)
     {
-        GameModel model = new GameModel();
-        model.starttime = entity.starttime;
-        model.id = entity.id;
-        model.state = entity.state;
-        return model;
+        List<String> res = new ArrayList<>();
+        StringBuilder line = new StringBuilder();
+        for (int i = 0; i < map.size(); i++) // for each line
+        {
+            for (int j = 0; j < map.get(i).length(); j += 2) // follow line
+            {
+                for(int k = 0; k < map.get(i).charAt(j) - '0'; k++) // add char
+                {
+                    line.append(map.get(i).charAt(j+1));
+                }
+            }
+            res.add(i, line.toString());
+            line = new StringBuilder();
+        }
+        return res;
     }
 
-    public PlayerModel convertToModel(PlayerEntity player, GameModel game)
-    {
-        PlayerModel model = new PlayerModel();
-        model.name = player.name;
-        model.id = player.id;
-        model.position = player.position;
-        model.posx = player.posx;
-        model.posy = player.posy;
-        model.lives = player.lives;
-        model.lastbomb = player.lastbomb;
-        model.lastmovement = player.lastmovement;
-        model.game_id = game;
-        return model;
-    }
+//    public GameModel convertToModel(GameEntity entity)
+//    {
+//        GameModel model = new GameModel();
+//        model.starttime = entity.starttime;
+//        model.id = entity.id;
+//        model.state = entity.state;
+//        return model;
+//    }
+//
+//    public PlayerModel convertToModel(PlayerEntity player, GameModel game)
+//    {
+//        PlayerModel model = new PlayerModel();
+//        model.name = player.name;
+//        model.id = player.id;
+//        model.position = player.position;
+//        model.posx = player.posx;
+//        model.posy = player.posy;
+//        model.lives = player.lives;
+//        model.lastbomb = player.lastbomb;
+//        model.lastmovement = player.lastmovement;
+//        model.game_id = game;
+//        return model;
+//    }
 }

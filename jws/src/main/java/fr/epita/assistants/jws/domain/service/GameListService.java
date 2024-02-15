@@ -3,14 +3,10 @@ package fr.epita.assistants.jws.domain.service;
 import fr.epita.assistants.jws.converter.GameConverter;
 import fr.epita.assistants.jws.data.repository.GameRepository;
 import fr.epita.assistants.jws.data.model.GameModel;
-import fr.epita.assistants.jws.domain.entity.GameEntity;
 import fr.epita.assistants.jws.presentation.rest.response.GameListResponse;
-// keep Entity Game
 
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
