@@ -18,16 +18,15 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @ApplicationScoped
 public class MovePlayerService {
 
     @ConfigProperty(name = "JWS_TICK_DURATION",
-    defaultValue = "50")
+    defaultValue = "1")
     String tick_duration;
     @ConfigProperty(name = "JWS_DELAY_MOMENT",
-    defaultValue = "5")
+    defaultValue = "1")
     String delay_moment;
 
     @Inject

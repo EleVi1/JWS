@@ -21,9 +21,9 @@ import java.util.List;
 
 @ApplicationScoped
 public class BombService {
-    @ConfigProperty(name = "JWS_TICK_DURATION", defaultValue = "2")
+    @ConfigProperty(name = "JWS_TICK_DURATION", defaultValue = "1")
     String tick_duration;
-    @ConfigProperty(name = "JWS_DELAY_BOMB", defaultValue = "1000")
+    @ConfigProperty(name = "JWS_DELAY_BOMB", defaultValue = "1")
     String delay_bomb;
     @Inject
     GameRepository gameRepository;
@@ -132,12 +132,12 @@ public class BombService {
         if (line.charAt(posX - 1) == 'W')
         {
             line.deleteCharAt(posX - 1);
-            line.insert(posX, 'G');
+            line.insert(posX - 1, 'G');
         }
         if (line.charAt(posX + 1) == 'W')
         {
             line.deleteCharAt(posX + 1);
-            line.insert(posX, 'G');
+            line.insert(posX + 1, 'G');
         }
         decoded.remove(posY);
         decoded.add(posY, line.toString());
