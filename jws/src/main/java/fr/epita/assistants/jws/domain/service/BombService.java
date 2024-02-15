@@ -21,9 +21,9 @@ import java.util.List;
 
 @ApplicationScoped
 public class BombService {
-    @ConfigProperty(name = "JWS_TICK_DURATION", defaultValue = "1")
+    @ConfigProperty(name = "JWS_TICK_DURATION", defaultValue = "2")
     String tick_duration;
-    @ConfigProperty(name = "JWS_DELAY_BOMB", defaultValue = "1")
+    @ConfigProperty(name = "JWS_DELAY_BOMB", defaultValue = "1000")
     String delay_bomb;
     @Inject
     GameRepository gameRepository;
@@ -78,8 +78,78 @@ public class BombService {
         {
             players_list.add(new CreatePlayerResponse(p.id, p.name, p.lives, p.posx, p.posy));
         }
-        // TODO change !!
+
+        new Thread(() -> {
+                try {
+                    Thread.sleep(Long.parseLong(delay_bomb) * Long.parseLong(tick_duration));
+                    explode(posX, posY, gameId);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+        }).start();
+
         return Response.ok(new GameDetailResponse(game.id, game.starttime, game.state, players_list,
                 game.map)).build();
+    }
+
+    @Transactional
+    public void explode(int posX, int posY, long gameId)
+    {
+        GameModel game = gameRepository.findById(gameId);
+        GameConverter conv = new GameConverter();
+        List<String> decoded = conv.decodeMap(game.map);
+
+        //Retrieve life of players
+        List<PlayerModel> players = game.players_id;
+        for (PlayerModel p:players)
+        {
+            if ((p.posx == posX && p.posy == posY + 1) || (p.posx == posX + 1 && p.posy == posY) ||
+                    (p.posx == posX - 1 && p.posy == posY) || (p.posx == posX && p.posy == posY - 1) ||
+                    (p.posx == posX && p.posy == posY) )
+            {
+                p.lives--;
+                gameRepository.persist(game);
+                playerRepository.persist(p);
+            }
+        }
+
+        StringBuilder line = new StringBuilder(decoded.get(posY));
+        line.deleteCharAt(posX);
+        line.insert(posX, 'G');
+        if (line.charAt(posX - 1) == 'W')
+        {
+            line.deleteCharAt(posX - 1);
+            line.insert(posX, 'G');
+        }
+        if (line.charAt(posX + 1) == 'W')
+        {
+            line.deleteCharAt(posX + 1);
+            line.insert(posX, 'G');
+        }
+        decoded.remove(posY);
+        decoded.add(posY, line.toString());
+
+        line = new StringBuilder(decoded.get(posY + 1));
+        if (line.charAt(posX) == 'W')
+        {
+            line.deleteCharAt(posX);
+            line.insert(posX, 'G');
+        }
+        decoded.remove(posY + 1);
+        decoded.add(posY + 1, line.toString());
+
+        line = new StringBuilder(decoded.get(posY - 1));
+        if (line.charAt(posX) == 'W')
+        {
+            line.deleteCharAt(posX);
+            line.insert(posX, 'G');
+        }
+        decoded.remove(posY - 1);
+        decoded.add(posY - 1, line.toString());
+
+        game.map = conv.encodeMap(decoded);
+        game = gameRepository.findById(gameId);
+        gameRepository.persist(game);
+
     }
 }

@@ -24,10 +24,10 @@ import java.util.concurrent.TimeUnit;
 public class MovePlayerService {
 
     @ConfigProperty(name = "JWS_TICK_DURATION",
-    defaultValue = "1")
+    defaultValue = "50")
     String tick_duration;
     @ConfigProperty(name = "JWS_DELAY_MOMENT",
-    defaultValue = "1")
+    defaultValue = "5")
     String delay_moment;
 
     @Inject
