@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class PlayerModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "suite") public long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) public long id;
 
     public Timestamp lastbomb;
     public Timestamp lastmovement;

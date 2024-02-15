@@ -30,7 +30,7 @@ public class JoinGameService {
         {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        if(game.state.compareTo("RUNNING") == 0 || game.state.compareTo("FINISHED") == 0 || game.players_id.size() == 4)
+        if(game.players_id.size() == 4)
         {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -56,9 +56,8 @@ public class JoinGameService {
         addedPlayer.game_id = game;
 
         game.players_id.add(addedPlayer);
-
-        playerRepository.persist(addedPlayer);
         gameRepository.persist(game);
+        playerRepository.persist(addedPlayer);
 
         List<PlayerModel> players = game.players_id;
         List<CreatePlayerResponse> players_list = new ArrayList<>();

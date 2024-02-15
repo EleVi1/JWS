@@ -8,7 +8,6 @@ import fr.epita.assistants.jws.presentation.rest.request.CreateGameRequest;
 import fr.epita.assistants.jws.presentation.rest.response.CreateGameResponse;
 import fr.epita.assistants.jws.presentation.rest.response.GameInfoResponse;
 import fr.epita.assistants.jws.presentation.rest.response.GameListResponse;
-import fr.epita.assistants.jws.presentation.rest.response.JoinGameResponse;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

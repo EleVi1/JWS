@@ -1,7 +1,5 @@
 package fr.epita.assistants.jws.presentation.rest.response;
 
-import org.w3c.dom.ls.LSException;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
