@@ -112,6 +112,19 @@ public class BombService {
                 playerRepository.persist(p);
             }
         }
+        int count = 0;
+        for (PlayerModel p: players)
+        {
+            if (p.lives > 0)
+            {
+                count++;
+            }
+        }
+        if (count <= 1)
+        {
+            game.state = "FINISHED";
+            gameRepository.persist(game);
+        }
 
         StringBuilder line = new StringBuilder(decoded.get(posY));
         line.deleteCharAt(posX);
