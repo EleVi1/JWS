@@ -5,7 +5,7 @@ import fr.epita.assistants.jws.data.model.PlayerModel;
 import fr.epita.assistants.jws.data.repository.GameRepository;
 import fr.epita.assistants.jws.data.repository.PlayerRepository;
 import fr.epita.assistants.jws.presentation.rest.response.CreatePlayerResponse;
-import fr.epita.assistants.jws.presentation.rest.response.JoinGameResponse;
+import fr.epita.assistants.jws.presentation.rest.response.GameDetailResponse;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -66,6 +66,6 @@ public class JoinGameService {
             players_list.add(new CreatePlayerResponse(player.id, player.name, player.lives, player.posx, player.posy));
         }
 
-        return Response.ok(new JoinGameResponse(game.id, game.starttime, game.state, players_list, game.map)).build();
+        return Response.ok(new GameDetailResponse(game.id, game.starttime, game.state, players_list, game.map)).build();
     }
 }

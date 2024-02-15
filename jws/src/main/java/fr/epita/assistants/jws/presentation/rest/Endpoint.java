@@ -1,12 +1,8 @@
 package fr.epita.assistants.jws.presentation.rest;
 
-import fr.epita.assistants.jws.domain.service.CreateGameService;
-import fr.epita.assistants.jws.domain.service.JoinGameService;
-import fr.epita.assistants.jws.domain.service.GameInfoService;
-import fr.epita.assistants.jws.domain.service.GameListService;
+import fr.epita.assistants.jws.domain.service.*;
 import fr.epita.assistants.jws.presentation.rest.request.CreateGameRequest;
-import fr.epita.assistants.jws.presentation.rest.response.CreateGameResponse;
-import fr.epita.assistants.jws.presentation.rest.response.GameInfoResponse;
+import fr.epita.assistants.jws.presentation.rest.response.GameDetailResponse;
 import fr.epita.assistants.jws.presentation.rest.response.GameListResponse;
 
 import javax.inject.Inject;
@@ -30,6 +26,8 @@ public class Endpoint {
     GameInfoService gameInfo;
     @Inject
     JoinGameService joinGameService;
+    @Inject
+    StartGameService startGameService;
 
     @GET
     @Path("/games")
@@ -48,7 +46,7 @@ public class Endpoint {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         String name = request.name;
-        CreateGameResponse response = gameService.create(name);
+        GameDetailResponse response = gameService.create(name);
 
         return Response.ok(response).build();
     }
@@ -61,7 +59,7 @@ public class Endpoint {
         {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        GameInfoResponse infos = gameInfo.getInfo(gameId);
+        GameDetailResponse infos = gameInfo.getInfo(gameId);
         if (infos == null)
         {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -81,26 +79,18 @@ public class Endpoint {
 
     }
 
-//    @PATCH
-//    @Path("/games/{gameId}/start")
-//    public Response startGame(@PathParam("gameId") long gameId)
-//    {
-//        //TODO
-//    }
-
-//    @POST
-//    @Path("/reverse")
-//    public Response reverse(ReverseRequest response)
-//    {
-//        if (response == null || response.content == null ||response.content.isEmpty() || response.content.compareTo("") == 0)
-//        {
-//            return Response.status(Response.Status.BAD_REQUEST).build();
-//        }
-//        ReverseResponse rep = new ReverseResponse(response);
-//        if (rep == null || rep.original == null || rep.original.isEmpty())
-//        {
-//            return Response.status(Response.Status.BAD_REQUEST).build();
-//        }
-//        return Response.ok(rep, MediaType.APPLICATION_JSON_TYPE).build();
-//    }
+    @PATCH
+    @Path("/games/{gameId}/start")
+    public Response startGame(@PathParam("gameId") long gameId) {
+        if (gameId <= 0)
+        {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        GameDetailResponse resp = startGameService.startGame(gameId);
+        if (resp == null)
+        {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(resp).build();
+    }
 }

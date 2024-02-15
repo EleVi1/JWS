@@ -5,8 +5,8 @@ import fr.epita.assistants.jws.data.model.GameModel;
 import fr.epita.assistants.jws.data.model.PlayerModel;
 import fr.epita.assistants.jws.data.repository.GameRepository;
 import fr.epita.assistants.jws.data.repository.PlayerRepository;
-import fr.epita.assistants.jws.presentation.rest.response.CreateGameResponse;
 import fr.epita.assistants.jws.presentation.rest.response.CreatePlayerResponse;
+import fr.epita.assistants.jws.presentation.rest.response.GameDetailResponse;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -41,7 +41,7 @@ public class CreateGameService {
     PlayerRepository playerRepository;
 
     @Transactional
-    public CreateGameResponse create(String player_name)
+    public GameDetailResponse create(String player_name)
     {
         GameModel game = new GameModel();
         game.state = "STARTING";
@@ -68,7 +68,7 @@ public class CreateGameService {
 
         List<CreatePlayerResponse> players = new ArrayList<>();
         players.add(new CreatePlayerResponse(player.id, player.name, player.lives, player.posx, player.posy));
-        CreateGameResponse response = new CreateGameResponse(game.id, game.starttime, game.state, players, content);
+        GameDetailResponse response = new GameDetailResponse(game.id, game.starttime, game.state, players, content);
 
         return response;
     }
