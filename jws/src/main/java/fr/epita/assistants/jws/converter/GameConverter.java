@@ -47,27 +47,31 @@ public class GameConverter {
         return res;
     }
 
-//    public GameModel convertToModel(GameEntity entity)
-//    {
-//        GameModel model = new GameModel();
-//        model.starttime = entity.starttime;
-//        model.id = entity.id;
-//        model.state = entity.state;
-//        return model;
-//    }
-//
-//    public PlayerModel convertToModel(PlayerEntity player, GameModel game)
-//    {
-//        PlayerModel model = new PlayerModel();
-//        model.name = player.name;
-//        model.id = player.id;
-//        model.position = player.position;
-//        model.posx = player.posx;
-//        model.posy = player.posy;
-//        model.lives = player.lives;
-//        model.lastbomb = player.lastbomb;
-//        model.lastmovement = player.lastmovement;
-//        model.game_id = game;
-//        return model;
-//    }
+    public List<String> encodeMap(List<String> decodedMap) {
+        List<String> res = new ArrayList<>();
+        for (String ref : decodedMap)
+        {
+            int key = 1;
+            StringBuilder line = new StringBuilder();
+            for (int i = 1; i < ref.length(); i++)
+            {
+                if (ref.charAt(i) != ref.charAt(i - 1))
+                {
+                    line.append(key).append(ref.charAt(i - 1));
+                    key = 1;
+                }
+                else {
+                    key++;
+                    if (key == 9)
+                    {
+                        line.append(key).append(ref.charAt(i - 1));
+                        key = 0;
+                    }
+                }
+            }
+            line.append(key).append(ref.charAt(ref.length() - 1));
+            res.add(line.toString());
+        }
+        return res;
+    }
 }

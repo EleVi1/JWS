@@ -5,7 +5,6 @@ import fr.epita.assistants.jws.data.model.GameModel;
 import fr.epita.assistants.jws.data.model.PlayerModel;
 import fr.epita.assistants.jws.data.repository.GameRepository;
 import fr.epita.assistants.jws.data.repository.PlayerRepository;
-import fr.epita.assistants.jws.errors.Errors;
 import fr.epita.assistants.jws.presentation.rest.response.CreatePlayerResponse;
 import fr.epita.assistants.jws.presentation.rest.response.GameDetailResponse;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -18,18 +17,13 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @ApplicationScoped
-public class MovePlayerService {
-
-    @ConfigProperty(name = "JWS_TICK_DURATION",
-    defaultValue = "1")
+public class BombService {
+    @ConfigProperty(name = "JWS_TICK_DURATION", defaultValue = "1")
     String tick_duration;
-    @ConfigProperty(name = "JWS_DELAY_MOMENT",
-    defaultValue = "1")
+    @ConfigProperty(name = "JWS_DELAY_BOMB", defaultValue = "1")
     String delay_moment;
-
     @Inject
     GameRepository gameRepository;
 
@@ -37,30 +31,29 @@ public class MovePlayerService {
     PlayerRepository playerRepository;
 
     @Transactional
-    public Response move(long gameId, long playerId, int posX, int posY) {
+    public Response putBomb(long gameId, long playerId, int posX, int posY) {
         GameModel game = gameRepository.findById(gameId);
         PlayerModel player = playerRepository.findById(playerId);
         if (game == null || player == null)
         {
-            return Errors.sendNotFound(); // Not Found 404
+            return Response.status(Response.Status.NOT_FOUND).build(); // Not Found 404
         }
         if (game.state.compareTo("RUNNING") != 0 || player.lives == 0 ||
-                (!isValid(posX, posY, player)))
+                (posY != player.posy || posX != player.posx))
         {
-            return Errors.sendBadRequest(); // Bad Request 400
+            return Response.status(Response.Status.BAD_REQUEST).build(); // Bad Request 400
         }
         GameConverter conv = new GameConverter();
         List<String> decodedMap = conv.decodeMap(game.map);
-        if (decodedMap.get(posY).charAt(posX) == 'M' ||
-                decodedMap.get(posY).charAt(posX) == 'B' ||
-                decodedMap.get(posY).charAt(posX) == 'W')
-        {
-            return Errors.sendBadRequest();
-        }
 
-        player.posx = posX;
-        player.posy = posY;
-        player.lastmovement = Timestamp.from(Instant.now());
+        StringBuilder line = new StringBuilder(decodedMap.get(posY));
+        line.deleteCharAt(posX);
+        line.insert(posX, 'B');
+        decodedMap.remove(posY);
+        decodedMap.add(posY, line.toString());
+        game.map = conv.encodeMap(decodedMap);
+
+        player.lastbomb = Timestamp.from(Instant.now());
         gameRepository.persist(game);
         playerRepository.persist(player);
 
@@ -73,14 +66,8 @@ public class MovePlayerService {
         {
             players_list.add(new CreatePlayerResponse(p.id, p.name, p.lives, p.posx, p.posy));
         }
-        return Response.ok(new GameDetailResponse(game.id, game.starttime, game.state, players_list, game.map)).build();
-    }
-
-    public boolean isValid(int posx, int posy, PlayerModel player)
-    {
-        return ((posx == player.posx && posy == player.posy + 1)
-                || (posx == player.posx - 1 && posy == player.posy)
-        || (posx == player.posx + 1 && posy == player.posy)
-        || (posx == player.posx && posy == player.posy - 1));
+        // TODO change !!
+        return Response.ok(new GameDetailResponse(game.id, game.starttime, game.state, players_list,
+                game.map)).build();
     }
 }

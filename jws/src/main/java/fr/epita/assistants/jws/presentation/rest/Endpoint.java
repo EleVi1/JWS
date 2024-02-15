@@ -1,6 +1,7 @@
 package fr.epita.assistants.jws.presentation.rest;
 
 import fr.epita.assistants.jws.domain.service.*;
+import fr.epita.assistants.jws.errors.Errors;
 import fr.epita.assistants.jws.presentation.rest.request.CreateGameRequest;
 import fr.epita.assistants.jws.presentation.rest.request.MovePlayerRequest;
 import fr.epita.assistants.jws.presentation.rest.response.GameDetailResponse;
@@ -32,6 +33,9 @@ public class Endpoint {
 
     @Inject
     MovePlayerService moveService;
+
+    @Inject
+    BombService bombService;
     @GET
     @Path("/games")
     public Response getAllGames()
@@ -46,7 +50,7 @@ public class Endpoint {
     {
         if (request == null || request.name == null || request.name.isEmpty())
         {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Errors.sendBadRequest();
         }
         String name = request.name;
         GameDetailResponse response = gameService.create(name);
@@ -60,12 +64,12 @@ public class Endpoint {
     {
         if (gameId < 0)
         {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Errors.sendNotFound();
         }
         GameDetailResponse infos = gameInfo.getInfo(gameId);
         if (infos == null)
         {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Errors.sendNotFound();
         }
         return Response.ok(infos).build();
     }
@@ -76,7 +80,7 @@ public class Endpoint {
     {
         if (request == null || request.name == null || request.name.isEmpty() || gameId <= 0)
         {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Errors.sendBadRequest();
         }
         return joinGameService.joinGame(gameId, request.name);
 
@@ -87,12 +91,12 @@ public class Endpoint {
     public Response startGame(@PathParam("gameId") long gameId) {
         if (gameId <= 0)
         {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Errors.sendNotFound();
         }
         GameDetailResponse resp = startGameService.startGame(gameId);
         if (resp == null)
         {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Errors.sendNotFound();
         }
         return Response.ok(resp).build();
     }
@@ -105,8 +109,21 @@ public class Endpoint {
         if (request == null || request.posX < 0 || request.posX >= 17
                 || request.posY < 0 ||  request.posY >= 15 || gameId <= 0)
         {
-            return Response.status(Response.Status.BAD_REQUEST).build(); // 400
+            return Errors.sendBadRequest();
         }
         return moveService.move(gameId, playerId, request.posX, request.posY);
+    }
+
+    @POST
+    @Path("/games/{gameId}/players/{playerId}/bomb")
+    public Response putBomb(@PathParam("gameId") long gameId, @PathParam("playerId") long playerId,
+                         MovePlayerRequest request)
+    {
+        if (request == null || request.posX < 0 || request.posX >= 17
+                || request.posY < 0 ||  request.posY >= 15 || gameId <= 0)
+        {
+            return Errors.sendBadRequest();
+        }
+        return bombService.putBomb(gameId, playerId, request.posX, request.posY);
     }
 }

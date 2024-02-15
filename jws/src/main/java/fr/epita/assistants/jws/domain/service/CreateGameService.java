@@ -26,14 +26,6 @@ public class CreateGameService {
     @ConfigProperty(name = "JWS_MAP_PATH",
             defaultValue = "src/test/resources/map1.rle")
     String map_path;
-//    @ConfigProperty(name = "JWS_TICK_DURATION")
-//    TimeUnit tick_duration;
-//    @ConfigProperty(name = "JWS_DELAY_MOMENT")
-//    TimeUnit delay_moment;
-//    @ConfigProperty(name = "JWS_DELAY_FREE")
-//    TimeUnit delay_free;
-//    @ConfigProperty(name = "JWS_DELAY_SHRINK")
-//    TimeUnit delay_shrink;
 
     @Inject
     GameRepository gameRepository;

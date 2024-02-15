@@ -4,6 +4,7 @@ import fr.epita.assistants.jws.data.model.GameModel;
 import fr.epita.assistants.jws.data.model.PlayerModel;
 import fr.epita.assistants.jws.data.repository.GameRepository;
 import fr.epita.assistants.jws.data.repository.PlayerRepository;
+import fr.epita.assistants.jws.errors.Errors;
 import fr.epita.assistants.jws.presentation.rest.response.CreatePlayerResponse;
 import fr.epita.assistants.jws.presentation.rest.response.GameDetailResponse;
 
@@ -28,12 +29,12 @@ public class JoinGameService {
         GameModel game = gameRepository.findById(game_id);
         if (game == null)
         {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Errors.sendNotFound();
         }
         if(game.state.compareTo("RUNNING") == 0 || game.state.compareTo("FINISHED") == 0
                 || game.players_id.size() == 4)
         {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Errors.sendBadRequest();
         }
 
         PlayerModel addedPlayer = new PlayerModel();
