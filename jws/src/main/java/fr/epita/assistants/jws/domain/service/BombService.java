@@ -21,9 +21,9 @@ import java.util.List;
 
 @ApplicationScoped
 public class BombService {
-    @ConfigProperty(name = "JWS_TICK_DURATION", defaultValue = "1")
+    @ConfigProperty(name = "JWS_TICK_DURATION", defaultValue = "10")
     String tick_duration;
-    @ConfigProperty(name = "JWS_DELAY_BOMB", defaultValue = "1")
+    @ConfigProperty(name = "JWS_DELAY_BOMB", defaultValue = "200")
     String delay_bomb;
     @Inject
     GameRepository gameRepository;

@@ -57,8 +57,14 @@ public class GameConverter {
             {
                 if (ref.charAt(i) != ref.charAt(i - 1))
                 {
-                    line.append(key).append(ref.charAt(i - 1));
-                    key = 1;
+                    if (key == 0)
+                    {
+                        key++;
+                    }
+                    else {
+                        line.append(key).append(ref.charAt(i - 1));
+                        key = 1;
+                    }
                 }
                 else {
                     key++;
