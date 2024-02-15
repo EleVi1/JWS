@@ -21,9 +21,6 @@ public class GameInfoService {
     @Inject
     GameRepository gameRepository;
 
-    @Inject
-    PlayerRepository playerRepository;
-
     @Transactional
     public GameInfoResponse getInfo(long game_id)
     {
