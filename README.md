@@ -9,3 +9,6 @@ Preliminary exercise to discover how endpoints work
 
 ## Databases
 Preliminart exercise to introduce the model layer of Quarkus
+
+## License
+Project made at EPITA
